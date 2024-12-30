@@ -7,7 +7,7 @@ const port = 3000;
 app.use(express.json())
 
 app.get("/", (req, res)=>{ //<<----test 
-    res.send("this is postgresql API")
+    res.send("this is RESTAPI")
 })
 
 app.use('/api/weather', weatherRoute)
