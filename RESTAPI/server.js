@@ -1,5 +1,5 @@
 const express = require('express')
-const weatherRoute = require('./src/weather/routes')
+const Route = require('./src/main/routes')
 
 const app = express();
 const port = 3000;
@@ -10,6 +10,6 @@ app.get("/", (req, res)=>{ //<<----test
     res.send("this is RESTAPI")
 })
 
-app.use('/api/weather', weatherRoute)
+app.use('/api/main', Route)
 
 app.listen(port, () => console.log(`app listening on port ${port}`))
