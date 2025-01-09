@@ -40,11 +40,14 @@ CREATE TABLE Customer (
 );
 
 CREATE TABLE Product (
-    ProductId 		INTEGER,
+    ProductId 		SERIAL,
     Name 			VARCHAR(100),
     Price 			FLOAT,
     Quantity 		INTEGER,
+    Warranty 		VARCHAR(50),
+    Brand 			VARCHAR(50),
     Description 	VARCHAR(500),
+	OtherInfor 		VARCHAR(500),
     Image 			VARCHAR(200),
     CategoryId 		INTEGER,
 	PRIMARY KEY (ProductId),
@@ -139,17 +142,21 @@ VALUES (2, 'Jane Smith', '202 Birch St, City B', 'jane.smith@example.com', '123-
 INSERT INTO Customer (CustomerId, Name, Address, Email, PhoneNumber, Membership, Point, CartId) 
 VALUES (3, 'Samuel Green', '303 Cedar St, City C', 'samuel.green@example.com', '123-456-9101', 'Bronze', 100, 3);
 --product
-INSERT INTO Product (ProductId, Name, Price, Quantity, Description, Image, CategoryId) 
-VALUES (1, 'iPhone 14', 999.99, 50, 'Latest Apple iPhone 14 with 5G support', 'iphone14.jpg', 1);
+INSERT INTO Product (Name, Price, Quantity, Description, Image, CategoryId) 
+VALUES ('iPhone 14', 999.99, 50, 'Latest Apple iPhone 14 with 5G support', 
+'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/h/photo_2022-09-28_21-58-56_2.jpg', 1);
 
-INSERT INTO Product (ProductId, Name, Price, Quantity, Description, Image, CategoryId) 
-VALUES (2, 'Samsung Galaxy S22', 899.99, 30, 'High-end Samsung smartphone with AMOLED display', 'galaxy_s22.jpg', 1);
+INSERT INTO Product (Name, Price, Quantity, Description, Image, CategoryId) 
+VALUES ('Samsung Galaxy S22', 899.99, 30, 'High-end Samsung smartphone with AMOLED display', 
+'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/m/sm-s901_galaxys22_front_phantomwhite_211122.jpg', 1);
 
-INSERT INTO Product (ProductId, Name, Price, Quantity, Description, Image, CategoryId) 
-VALUES (3, 'Apple AirPods', 199.99, 100, 'Wireless Bluetooth earbuds from Apple', 'airpods.jpg', 2);
+INSERT INTO Product (Name, Price, Quantity, Description, Image, CategoryId) 
+VALUES ('Apple AirPods', 199.99, 100, 'Wireless Bluetooth earbuds from Apple', 
+'https://cdn2.cellphones.com.vn/x/media/catalog/product/3/_/3_10_120_1_1.jpg', 2);
 
-INSERT INTO Product (ProductId, Name, Price, Quantity, Description, Image, CategoryId) 
-VALUES (4, 'Samsung Galaxy Tab S7', 649.99, 40, 'High-performance Android tablet', 'galaxy_tab_s7.jpg', 3);
+INSERT INTO Product (Name, Price, Quantity, Description, Image, CategoryId) 
+VALUES ('Samsung Galaxy Tab S7', 649.99, 40, 'High-performance Android tablet', 
+'https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-tab-s7-plus-3_5.jpg', 3);
 --shipment
 INSERT INTO Shipment (ShipmentId, Status, DateShipped, ShipperId) 
 VALUES (1, 'Shipped', TO_DATE('2024-12-25', 'YYYY-MM-DD'), 3);
@@ -178,4 +185,7 @@ VALUES (2, TO_DATE('2024-12-26', 'YYYY-MM-DD'), 'Pending', 2, 2, 2);
 INSERT INTO Orders (OrderId, CreationDate, Status, UserId, PaymentId, ShipmentId) 
 VALUES (3, TO_DATE('2024-12-27', 'YYYY-MM-DD'), 'Completed', 3, 3, 3);
 
-SELECT * FROM Product;
+SELECT ProductId, Name, Price, Warranty, Brand, Description, OtherInfor, Image 
+FROM Product;
+
+-- The iPhone 16 Pro Max is the largest iPhone Apple has ever made, and it offers the longest ever battery life on an iPhone.

@@ -42,27 +42,31 @@
             </div>
             <div class="form-group">
                 <label>Name of the product:</label>
-                <input type="text" placeholder="Enter product name">
+                <input type="text" id="product-name" placeholder="Enter product name">
+            </div>
+            <div class="form-group">
+                <label>Price:</label>
+                <input type="number" id="product-price" placeholder="Enter product price">
             </div>
             <div class="form-group">
                 <label>Description:</label>
-                <textarea placeholder="Enter product description"></textarea>
+                <textarea id="product-description" placeholder="Enter product description"></textarea>
             </div>
             <div class="form-group">
                 <label>Brand:</label>
-                <input type="text" placeholder="Enter brand name">
+                <input type="text" id="product-brand" placeholder="Enter brand name">
             </div>
             <div class="form-group">
                 <label>Warranty:</label>
-                <input type="text" placeholder="Enter warranty information">
+                <input type="text" id="product-warranty" placeholder="Enter warranty information">
             </div>
             <div class="form-group">
                 <label>Other information:</label>
-                <textarea placeholder="Enter additional information"></textarea>
+                <textarea id="product-other-info" placeholder="Enter additional information"></textarea>
             </div>
             <div class="actions">
-                <a href="home.html" class="button"><button>Cancel</button></a>
-                <a href="home.html" class="button"><button>Confirm</button></a>
+                <button id="cancel-button">Cancel</button>
+                <button id="confirm-button">Confirm</button>
             </div>
         </div>
     </div>
@@ -86,3 +90,61 @@
     </footer>
 </body>
 </html>
+<script>
+    // Xử lý sự kiện nhấn nút "Confirm"
+    document.getElementById('confirm-button').addEventListener('click', async (e) => {
+        e.preventDefault(); // Ngăn chặn reload trang
+
+        // Thu thập dữ liệu từ form
+        const name = document.getElementById('product-name').value.trim();
+        const price = parseFloat(document.getElementById('product-price').value.trim());
+        const description = document.getElementById('product-description').value.trim();
+        const brand = document.getElementById('product-brand').value.trim();
+        const warranty = document.getElementById('product-warranty').value.trim();
+        const otherInfo = document.getElementById('product-other-info').value.trim();
+
+        // Kiểm tra dữ liệu hợp lệ
+        if (!name || !price) {
+            alert('Name and price are required!');
+            return;
+        }
+
+        try {
+            // Gửi dữ liệu đến API
+            const response = await fetch('http://localhost:3000/product/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name,
+                    price,
+                    warranty,
+                    brand,
+                    description,
+                    otherInfor: otherInfo
+                }),
+            });
+
+            // Kiểm tra phản hồi từ API
+            if (!response.ok) {
+                throw new Error('Failed to add product');
+            }
+
+            const result = await response.json();
+            alert(result.message); // Hiển thị thông báo thành công
+
+            // Chuyển hướng về trang danh sách sản phẩm
+            window.location.href = 'home.html';
+        } catch (error) {
+            console.error('Error adding product:', error);
+            alert('Error adding product');
+        }
+    });
+
+    // Xử lý sự kiện nhấn nút "Cancel"
+    document.getElementById('cancel-button').addEventListener('click', (e) => {
+        e.preventDefault(); // Ngăn chặn reload trang
+        window.location.href = 'home.html'; // Quay lại trang danh sách sản phẩm
+    });
+</script>
