@@ -1,34 +1,25 @@
-const sql = require('mssql');
+const Pool = require('pg').Pool
 
-const dbConfig = {
-    user: 'sa',
-    password: '12345',
-    server: 'localhost',
-    database: 'ProgrammingIntegrationProject',
-    connectionTimeout: 600000,
-    requestTimeout: 600000,
-    options: {
-        trustedConnection: true,
-        trustServerCertificate: true,
-        multipleActiveResultSets: true
-    }
-};
+const sql = new Pool({
+    user: "postgres",
+    host: "localhost",
+    database: "DATH",
+    password: "123",
+    port: 5432,
+});
 
-// Function to connect to the database
-const connectToDatabase = async () =>
-{
-    try
-    {
-        await sql.connect(dbConfig);
-        console.log('Connected to SQL Server');
-    }
-    catch (err)
-    {
-        console.error('Database connection failed:', err);
-    }
-};
+    (async () => {
+        try {
+            await sql.connect();
+            console.log('Connected to the database');
 
-module.exports = {
-    connectToDatabase,
-    sql
-};
+            const res = await sql.query('SELECT version();');
+            console.log('Database Version:', res.rows[0]);
+        } catch (err) {
+            console.error('Error connecting to the database:', err);
+        } finally {
+            //await sql.end();
+        }
+    })();
+
+module.exports = { sql };

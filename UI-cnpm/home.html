@@ -84,15 +84,19 @@
             const productSection = document.querySelector('.products');
             productSection.innerHTML = ''; // Clear the product section
 
+            const defaultImage = 'https://www.bfmtv.com/comparateur/wp-content/uploads/2021/04/Samsung-Galaxy-S21-250x300.jpg';
+
             products.forEach(product => {
                 const productDiv = document.createElement('div');
                 productDiv.classList.add('product');
                 productDiv.innerHTML = `
                     <div class="product-image">
-                        <img src="https://www.bfmtv.com/comparateur/wp-content/uploads/2021/04/Samsung-Galaxy-S21-250x300.jpg" alt="${product.Name}">
+                        <img src="${product.image ? product.image : defaultImage}" 
+                        width="300" height="200" 
+                        alt="${product.name}">
                     </div>
-                    <h3>${product.Name}</h3>
-                    <p class="price">$${product.Price}</p>
+                    <h3>${product.name}</h3>
+                    <p class="price">$${product.price}</p>
                     <a href="#" class="add-to-cart">Add to cart</a>
                 `;
                 productSection.appendChild(productDiv);

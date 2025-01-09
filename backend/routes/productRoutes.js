@@ -1,6 +1,9 @@
 const express = require('express');
-const { getDataByName, getDataById, getAllData, insertProduct } = require('../controllers/productController');
+const { homepage, getDataByName, getDataById, getAllData, insertProduct } = require('../controllers/productController');
 const router = express.Router();
+
+// Homepage
+router.get('/', homepage);
 
 // Insert a new product
 router.post('/add', insertProduct);

@@ -1,4 +1,8 @@
 const { sql } = require('../configs/dbConfig');
+const path = require('path');
+const homepage = async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '..', 'UI-cnpm', 'home.html'));
+}
 
 const getDataByName = async (req, res) => {
     const { name } = req.params; // Lấy 'name' từ route parameters
@@ -8,7 +12,7 @@ const getDataByName = async (req, res) => {
     try {
         const pool = await sql.connect();
         const query = `
-            SELECT Name, Price, Warranty, Brand, Description, OtherInfor
+            SELECT Name, Price, Warranty, Brand, Description, OtherInfor, Image
             FROM Product
             WHERE Name = @name;
         `;
@@ -17,11 +21,11 @@ const getDataByName = async (req, res) => {
             .input('name', sql.NVarChar, name)
             .query(query);
 
-        if (result.recordset.length === 0) {
+        if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        const product = result.recordset[0];
+        const product = result.rows[0];
         return res.status(200).json({
             name: product.Name,
             price: product.Price,
@@ -46,7 +50,7 @@ const getDataByName = async (req, res) => {
 //     try {
 //         const pool = await sql.connect();
 //         const query = `
-//             SELECT Name, Price, Warranty, Brand, Description, OtherInfor
+//             SELECT Name, Price, Warranty, Brand, Description, OtherInfor, Image
 //             FROM Product
 //             WHERE Name = @name;
 //         `;
@@ -55,13 +59,13 @@ const getDataByName = async (req, res) => {
 //             .input('name', sql.NVarChar, name)
 //             .query(query);
 
-//         console.log('Query result:', result.recordset); // Log kết quả trả về từ SQL
+//         console.log('Query result:', result.rows); // Log kết quả trả về từ SQL
 
-//         if (result.recordset.length === 0) {
+//         if (result.rows.length === 0) {
 //             return res.status(404).json({ message: 'Product not found' });
 //         }
 
-//         const product = result.recordset[0];
+//         const product = result.rows[0];
 //         return res.status(200).json(product);
 //     } catch (error) {
 //         console.error('Error:', error);
@@ -79,15 +83,15 @@ const getDataById = async (req, res) =>
     {
         const pool = await sql.connect();
         const query = `
-            SELECT ProductId, Name, Price, Warranty, Brand, Description, OtherInfor 
+            SELECT ProductId, Name, Price, Warranty, Brand, Description, OtherInfor, Image 
             FROM Product
             WHERE ProductId = @id;
         `;
 
         const result = await pool.request().input('id', sql.Int, id).query(query);
 
-        if (result.recordset.length === 0) return res.status(404).json({ message: 'Product not found' });
-        return res.status(200).json(result.recordset[0]);
+        if (result.rows.length === 0) return res.status(404).json({ message: 'Product not found' });
+        return res.status(200).json(result.rows[0]);
     }
     catch (error)
     {
@@ -102,13 +106,13 @@ const getAllData = async (req, res) =>
     {
         const pool = await sql.connect();
         const query = `
-            SELECT ProductId, Name, Price, Warranty, Brand, Description, OtherInfor 
+            SELECT ProductId, Name, Price, Warranty, Brand, Description, OtherInfor, Image 
             FROM Product;
         `;
+        
+        const result = await pool.query(query);
 
-        const result = await pool.request().query(query);
-
-        return res.status(200).json(result.recordset);
+        return res.status(200).json(result.rows);
     }
     catch (error)
     {
@@ -120,7 +124,7 @@ const getAllData = async (req, res) =>
 
 const insertProduct = async (req, res) =>
 {
-    const { name, price, warranty, brand, description, otherInfor } = req.body;
+    const { name, price, warranty, brand, description, otherInfor, image } = req.body;
 
     console.log(`name: ${name}, price ${price}`);
     
@@ -130,18 +134,11 @@ const insertProduct = async (req, res) =>
     {
         const pool = await sql.connect();
         const query = `
-            INSERT INTO Product (Name, Price, Warranty, Brand, Description, OtherInfor)
-            VALUES (@name, @price, @warranty, @brand, @description, @otherInfor)
+            INSERT INTO Product (Name, Price, Warranty, Brand, Description, OtherInfor, Image)
+            VALUES ('${name}', ${price}, '${warranty}', '${brand}', '${description}', '${otherInfor}', NULL);
         `;
 
-        await pool.request()
-            .input('name', sql.NVarChar, name)
-            .input('price', sql.Decimal(10, 2), price)
-            .input('warranty', sql.NVarChar, warranty)
-            .input('brand', sql.NVarChar, brand)
-            .input('description', sql.NVarChar, description)
-            .input('otherInfor', sql.NVarChar, otherInfor)
-            .query(query);
+        await pool.query(query);
 
         return res.status(200).json({ message: 'Product added successfully' });
     }
@@ -153,6 +150,7 @@ const insertProduct = async (req, res) =>
 };
 
 module.exports = {
+    homepage,
     getDataByName,
     insertProduct,
     getDataById,
