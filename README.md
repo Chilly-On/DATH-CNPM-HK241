@@ -14,6 +14,6 @@ Download PostgreSQL, using SQL file from server/database Postgre.sql to set up t
 
 Run the following command:
 ```
-  cd backend
-  node server
+    cd backend
+    node server
 ```
