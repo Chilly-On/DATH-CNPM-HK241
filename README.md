@@ -1,10 +1,19 @@
 ﻿# DATH-CNPM-HK241
 
-### Cách chạy phần mểm
+### How to run the application
 
-Thực hiện các lệnh như sau:
+Download PostgreSQL, using SQL file from server/database Postgre.sql to set up the database with the following setup:
 
 ```
-cd backend
-node server
+    user: "postgres",
+    host: "localhost",
+    database: "DATH",
+    password: "123",
+    port: 5432,
+```
+
+Run the following command:
+```
+  cd backend
+  node server
 ```
